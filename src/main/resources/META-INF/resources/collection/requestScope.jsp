@@ -1,3 +1,6 @@
+<%@page import="java.util.Enumeration"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -7,7 +10,7 @@
 <html>
 <head>
 <meta charset=UTF-8">
-<title>index.jsp</title>
+<title>requestScope.jsp</title>
 <!-- 1. animate -->
 <link rel="stylesheet" href="/webjars/animate.css/3.5.2/animate.min.css">
 <!-- 2. bootstrap -->
@@ -18,32 +21,32 @@
 <script type="text/javascript" src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<ol>
-	<li><a href="/member">memberform</a></li>
-</ol>
-<h1>EL(Expression Language) 내장객체 11가지</h1>
 <%
-	request.setAttribute("el_1", "pageContext 기본객체");
-	request.setAttribute("el_2", "pageScope 기본객체");
-	
-	session.setAttribute("el_3", "requestScope 기본객체");
-	session.setAttribute("el_4", "sessionScope 기본객체");
-	
-	application.setAttribute("el_5", "applicationScope 기본객체");
-%>
-<ol>
-	<li>${requestScope.el_1}</li>
-	<li>${requestScope.el_2}</li>
-	<li>${sessionScope.el_3}</li>
-	<li>${sessionScope.el_4}</li>
-	<li>${applicationScope.el_5}</li>
-	<li>param</li>
-	<li>paramValues</li>
-	<li>header</li>
-	<li>headerValues</li>
-	<li>cookie</li>
-	<li>initParam</li>
-</ol>
+	request.setAttribute("one", 1);
+	request.setAttribute("two", 4);
+	request.setAttribute("three", 5);
 
+%>
+one = ${requestScope.one}<br>
+two = ${requestScope.two}<br>
+three = ${requestScope.three}<br>
+
+<%
+	Map<String, Object> requestScope = new HashMap<>();
+
+	Enumeration<String> names = request.getAttributeNames();
+	
+	while(names.hasMoreElements()) {
+		
+		String name = names.nextElement();
+		Object value = (Object)request.getAttribute(name);
+		requestScope.put(name, value);
+	}
+%>
+
+one = <%= requestScope.get("one") %><br>
+two = <%= requestScope.get("two") %><br>
+three = <%= requestScope.get("three") %><br>
+four = <%= requestScope.get("four") %><br>
 </body>
 </html>
